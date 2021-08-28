@@ -14,6 +14,7 @@ module SolargraphTestCoverage
     #
     # Runs RSpec on test file in a child process
     # Returns coverage results for current working file
+    # RSpec::Core::Runner.run will return 0 if the test file passes, and 1 if it does not.
     #
     # @return [Hash]
     #
@@ -23,8 +24,8 @@ module SolargraphTestCoverage
         require 'coverage'
 
         Coverage.start(lines: true, branches: true)
-        RSpec::Core::Runner.run([test_file])
-        Coverage.result.fetch(source.location.filename, nil)
+        exit_code = RSpec::Core::Runner.run([test_file])
+        Coverage.result.fetch(source.location.filename, {}).merge({ test_status: exit_code })
       end
     end
 

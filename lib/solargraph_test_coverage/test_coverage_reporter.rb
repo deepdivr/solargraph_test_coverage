@@ -19,8 +19,9 @@ module SolargraphTestCoverage
       results  = run_rspec(source, test_file)
       lines    = uncovered_lines(results).map { |line| line_coverage_warning(source, line) }
       branches = uncovered_branches(results).map { |branch| branch_coverage_warning(source, branch.report) }
+      status   = results[:test_status].zero? ? [] : [test_failing_error(source)]
 
-      lines + branches
+      lines + branches + status
     rescue ChildFailedError
       []
     end
@@ -52,6 +53,20 @@ module SolargraphTestCoverage
         severity: Solargraph::Diagnostics::Severities::WARNING,
         source: 'TestCoverage',
         message: "'#{report[:type].upcase}' branch is missing test coverage"
+      }
+    end
+
+    #
+    # Creates LSP error message if test is failing
+    #
+    # @return [Hash]
+    #
+    def test_failing_error(source)
+      {
+        range: Solargraph::Range.from_to(0, 0, 0, source.code.lines[0].length).to_hash,
+        severity: Solargraph::Diagnostics::Severities::ERROR,
+        source: 'TestCoverage',
+        message: "Unit Test is currently failing."
       }
     end
   end

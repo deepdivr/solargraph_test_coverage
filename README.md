@@ -1,8 +1,8 @@
 # SolargraphTestCoverage
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/solargraph_test_coverage`. To experiment with that code, run `bin/console` for an interactive prompt.
+Solargraph Plugin that provides a diagnostic reporter for unit-test coverage.
 
-TODO: Delete this and the text above, and describe your gem
+Currently only works with RSpec. 
 
 ## Installation
 
@@ -10,6 +10,14 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'solargraph_test_coverage'
+```
+
+Then add this to your `.solargraph.yml` config:
+```yaml
+plugins:
+  - solargraph_test_coverage
+reporters:
+- test_coverage
 ```
 
 And then execute:
@@ -22,7 +30,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+With solargraph running and connected to your text editor, you should see diagnostic messages for test coverage.
 
 ## Development
 
@@ -32,7 +40,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/solargraph_test_coverage.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ckolkey/solargraph_test_coverage.
 
 
 ## License

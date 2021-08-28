@@ -11,6 +11,10 @@ module SolargraphTestCoverage
     # @return [Array]
     #
     def diagnose(source, _api_map)
+      # TODO: filtering for which files to check would be a good idea
+      # f.ex controllers should be skipped
+      # /lib/ should be included, too
+
       return [] if source.code.empty? || !source.location.filename.include?('/app/')
 
       test_file = locate_test_file(source)

@@ -14,7 +14,7 @@ module SolargraphTestCoverage
       return [] if source.code.empty? || !source.location.filename.include?('/app/')
 
       test_file = locate_test_file(source)
-      return [] unless File.file?(test_file)
+      return [no_test_file_error(source, test_file)] unless File.file?(test_file)
 
       results  = run_rspec(source, test_file)
       lines    = uncovered_lines(results).map { |line| line_coverage_warning(source, line) }
@@ -67,6 +67,20 @@ module SolargraphTestCoverage
         severity: Solargraph::Diagnostics::Severities::ERROR,
         source: 'TestCoverage',
         message: "Unit Test is currently failing."
+      }
+    end
+
+    #
+    # Creates LSP error message if test is failing
+    #
+    # @return [Hash]
+    #
+    def no_test_file_error(source, test_file_location)
+      {
+        range: Solargraph::Range.from_to(0, 0, 0, source.code.lines[0].length).to_hash,
+        severity: Solargraph::Diagnostics::Severities::ERROR,
+        source: 'TestCoverage',
+        message: "No unit test file found at #{test_file_location}"
       }
     end
   end

@@ -71,7 +71,7 @@ module SolargraphTestCoverage
     end
 
     #
-    # Creates LSP error message if test is failing
+    # Creates LSP error message if no test file can be found
     #
     # @return [Hash]
     #

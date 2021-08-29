@@ -44,12 +44,15 @@ module SolargraphTestCoverage
 
     #
     # Creates LSP warning message for missing branch coverage
+    # We need to correct the line number (-1), since the coverage module
+    # starts counting lines at 1, while the LSP (source.code.line) is an array
+    # with an index starting at 0
     #
     # @return [Hash]
     #
     def branch_coverage_warning(source, report)
       {
-        range: Solargraph::Range.from_to(report[:line], 0, report[:line], source.code.lines[report[:line]].length).to_hash,
+        range: Solargraph::Range.from_to(report[:line] - 1, 0, report[:line] - 1, source.code.lines[report[:line] - 1].length).to_hash,
         severity: Solargraph::Diagnostics::Severities::WARNING,
         source: 'TestCoverage',
         message: "'#{report[:type].upcase}' branch is missing test coverage"

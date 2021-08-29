@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'solargraph', '> 0.40'
+  spec.add_runtime_dependency 'rspec-core', '>= 3.10.0'
 end

@@ -32,6 +32,12 @@ Or install it yourself as:
 
 With solargraph running and connected to your text editor, you should see diagnostic messages for test coverage.
 
+Currently there are four different messages:
+- Line is not covered
+- Branch is not covered (With a note if it's the 'THEN' or 'ELSE' branch)
+- Spec is failing (Error message will be on line 1)
+- Spec cannot be found (Error message will be on line 1)
+
 
 ## Contributing
 

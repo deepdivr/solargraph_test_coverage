@@ -18,6 +18,7 @@ require 'coverage'
 
 module SolargraphTestCoverage
   class ChildFailedError < StandardError; end
+  Helpers.preload_rails!
 
   Solargraph::Diagnostics.register 'test_coverage', TestCoverageReporter
 end

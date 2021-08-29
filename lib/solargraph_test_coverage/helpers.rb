@@ -52,5 +52,26 @@ module SolargraphTestCoverage
     def uncovered_branches(results)
       Branch.build_from(results).reject(&:covered?)
     end
+
+    #
+    # Only called once, when gem is loaded
+    # Preloads rails via spec/rails_helper if Rails isn't already defined
+    # This gives us a nice speed-boost when running test in child process
+    #
+    # We rescue the LoadError since solargraph would catch it otherwise,
+    # and not load the plugin at all.
+    #
+    # If Coverage was started in Rails/Spec helper by SimpleCov,
+    # calling Coverage.result after requiring stops and resets it.
+    #
+    def self.preload_rails!
+      return if defined?(Rails)
+
+      require File.expand_path("spec/rails_helper.rb") if File.file?('spec/rails_helper.rb')
+      Coverage.result(stop: true, clear: true) if Coverage.running?
+    rescue LoadError => e
+      puts "LoadError when trying to require rails!"
+      puts e
+    end
   end
 end

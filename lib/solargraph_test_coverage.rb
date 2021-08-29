@@ -9,10 +9,12 @@ require 'rspec/core'
 require 'coverage'
 
 # TODO
-# - Run when spec file changes
-# - This might not work with LSP, since the results would be sent to the wrong buffer
 # - Finding the right file could use some work
-# -
+# - Config Options for different errors (line, branch, test missing, test failing)
+# - Minitest/Cucumber Support
+# - app/lib support
+# - filter out stuff like controllers that wouldn't have tests
+# - Publish Gem to Rubygems
 
 module SolargraphTestCoverage
   class ChildFailedError < StandardError; end

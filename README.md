@@ -17,7 +17,7 @@ Then add this to your `.solargraph.yml` config:
 plugins:
   - solargraph_test_coverage
 reporters:
-- test_coverage
+  - test_coverage
 ```
 
 And then execute:

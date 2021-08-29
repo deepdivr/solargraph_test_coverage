@@ -20,9 +20,6 @@ module SolargraphTestCoverage
     #
     def run_rspec(source, test_file)
       ForkProcess.run do
-        require 'rspec/core'
-        require 'coverage'
-
         Coverage.start(lines: true, branches: true)
         exit_code = RSpec::Core::Runner.run([test_file])
         Coverage.result.fetch(source.location.filename, {}).merge({ test_status: exit_code })

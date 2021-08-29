@@ -5,6 +5,8 @@ require 'solargraph_test_coverage/helpers'
 require 'solargraph_test_coverage/test_coverage_reporter'
 
 require 'solargraph'
+require 'rspec/core'
+require 'coverage'
 
 # TODO
 # - Run when spec file changes

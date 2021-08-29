@@ -35,12 +35,12 @@ module SolargraphTestCoverage
     #
     # @return [Array]
     #
-    def uncovered_lines(coverage)
-      coverage.fetch(:lines)
-              .each_with_index
-              .select { |c, _| c == 0 }
-              .map { |_, i| i }
-              .compact
+    def uncovered_lines(results)
+      results.fetch(:lines)
+             .each_with_index
+             .select { |c, _| c == 0 }
+             .map { |_, i| i }
+             .compact
     end
 
     #

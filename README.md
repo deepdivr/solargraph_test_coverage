@@ -20,6 +20,17 @@ reporters:
   - test_coverage
 ```
 
+If you are using a `spec/rails_helper.rb` file, you will need to change:
+```ruby
+require "spec_helper"
+```
+
+to
+
+```ruby
+require_relative "spec_helper"
+```
+
 And then execute:
 
     $ bundle install

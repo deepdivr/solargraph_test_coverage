@@ -71,12 +71,13 @@ module SolargraphTestCoverage
     #
     def self.preload_rails!
       return if defined?(Rails)
+      return unless File.file?('spec/rails_helper.rb')
 
-      require File.expand_path("spec/rails_helper.rb") if File.file?('spec/rails_helper.rb')
+      require File.expand_path("spec/rails_helper.rb")
       Coverage.result(stop: true, clear: true) if Coverage.running?
     rescue LoadError => e
-      puts "LoadError when trying to require rails!"
-      puts e
+      Solargraph::Logging.logger.warn "LoadError when trying to require 'rails_helper'"
+      Solargraph::Logging.logger.warn "[#{e.class}] #{e.message}"
     end
   end
 end

@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Solargraph Plugin'
   spec.description   = 'Solargraph Plugin that reports line/branch coverage from unit tests'
-  spec.homepage      = 'https://github.com/ckolkey/solargraph_test_coverage'
+  spec.homepage      = 'https://github.com/deepdivr/solargraph_test_coverage'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 

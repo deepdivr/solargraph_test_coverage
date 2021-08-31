@@ -52,7 +52,7 @@ Currently there are four different messages:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ckolkey/solargraph_test_coverage.
+Bug reports and pull requests are welcome on GitHub at https://github.com/deepdivr/solargraph_test_coverage.
 
 
 ## License

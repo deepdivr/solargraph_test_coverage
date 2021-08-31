@@ -73,7 +73,7 @@ module SolargraphTestCoverage
       return if defined?(Rails)
       return unless File.file?('spec/rails_helper.rb')
 
-      require File.expand_path("spec/rails_helper.rb")
+      require File.expand_path('spec/rails_helper')
       Coverage.result(stop: true, clear: true) if Coverage.running?
     rescue LoadError => e
       Solargraph::Logging.logger.warn "LoadError when trying to require 'rails_helper'"

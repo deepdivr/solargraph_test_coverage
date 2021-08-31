@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     solargraph_test_coverage (0.1.1)
-      rspec-core (>= 3.10.0)
-      solargraph (> 0.40)
+      rspec-core (~> 3.10, >= 3.10.0)
+      solargraph (~> 0.40, > 0.40)
 
 GEM
   remote: https://rubygems.org/

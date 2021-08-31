@@ -52,7 +52,8 @@ module SolargraphTestCoverage
     #
     def branch_coverage_warning(source, report)
       {
-        range: Solargraph::Range.from_to(report[:line] - 1, 0, report[:line] - 1, source.code.lines[report[:line] - 1].length).to_hash,
+        range: Solargraph::Range.from_to(report[:line] - 1, 0, report[:line] - 1,
+                                         source.code.lines[report[:line] - 1].length).to_hash,
         severity: Solargraph::Diagnostics::Severities::WARNING,
         source: 'TestCoverage',
         message: "'#{report[:type].upcase}' branch is missing test coverage"
@@ -69,7 +70,7 @@ module SolargraphTestCoverage
         range: Solargraph::Range.from_to(0, 0, 0, source.code.lines[0].length).to_hash,
         severity: Solargraph::Diagnostics::Severities::ERROR,
         source: 'TestCoverage',
-        message: "Unit Test is currently failing."
+        message: 'Unit Test is currently failing.'
       }
     end
 

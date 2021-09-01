@@ -39,6 +39,7 @@ test_coverage:
   - test_missing
   exclude_paths:
   - 'app/controller'
+  - 'concerns'
 ```
 
 

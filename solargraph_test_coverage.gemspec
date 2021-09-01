@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'lib/solargraph_test_coverage/version'
 
 Gem::Specification.new do |spec|
@@ -28,6 +30,5 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'rspec-core', '~> 3.10', '>= 3.10.0'
   spec.add_runtime_dependency 'solargraph', '~> 0.40', '> 0.40'
 end

@@ -11,22 +11,37 @@ module SolargraphTestCoverage
     # @return [Array]
     #
     def diagnose(source, _api_map)
-      return [] if source.code.empty? || !source.location.filename.include?('/app/')
+      return [] if source.code.empty? || exclude_file?(source.location.filename)
+      return [test_missing_error(source)] unless File.file?(test_file(source))
 
-      test_file = locate_test_file(source)
-      return [no_test_file_error(source, test_file)] unless File.file?(test_file)
-
-      results  = run_rspec(source, test_file)
-      lines    = uncovered_lines(results).map { |line| line_coverage_warning(source, line) }
-      branches = uncovered_branches(results).map { |branch| branch_coverage_warning(source, branch.report) }
-      status   = results[:test_status].zero? ? [] : [test_failing_error(source)]
-
-      lines + branches + status
+      messages(source)
     rescue ChildFailedError
       []
     end
 
     private
+
+    def messages(source)
+      messages = [
+        line_warnings(source),
+        branch_warnings(source),
+        test_passing_error(source)
+      ]
+
+      messages.flatten.compact
+    end
+
+    def line_warnings(source)
+      uncovered_lines(results(source)).map { |line| line_coverage_warning(source, line) }
+    end
+
+    def branch_warnings(source)
+      uncovered_branches(results(source)).map { |branch| branch_coverage_warning(source, branch.report) }
+    end
+
+    def test_passing_error(source)
+      results(source)[:test_status] ? [] : [test_failing_error(source)]
+    end
 
     #
     # Creates LSP warning message for missing line coverage
@@ -34,6 +49,8 @@ module SolargraphTestCoverage
     # @return [Hash]
     #
     def line_coverage_warning(source, line)
+      return unless Config.line_coverage?
+
       {
         range: Solargraph::Range.from_to(line, 0, line, source.code.lines[line].length).to_hash,
         severity: Solargraph::Diagnostics::Severities::WARNING,
@@ -51,6 +68,8 @@ module SolargraphTestCoverage
     # @return [Hash]
     #
     def branch_coverage_warning(source, report)
+      return unless Config.branch_coverage?
+
       {
         range: Solargraph::Range.from_to(report[:line] - 1, 0, report[:line] - 1,
                                          source.code.lines[report[:line] - 1].length).to_hash,
@@ -66,6 +85,8 @@ module SolargraphTestCoverage
     # @return [Hash]
     #
     def test_failing_error(source)
+      return unless Config.test_failing_coverage?
+
       {
         range: Solargraph::Range.from_to(0, 0, 0, source.code.lines[0].length).to_hash,
         severity: Solargraph::Diagnostics::Severities::ERROR,
@@ -79,12 +100,14 @@ module SolargraphTestCoverage
     #
     # @return [Hash]
     #
-    def no_test_file_error(source, test_file_location)
+    def test_missing_error(source)
+      return unless Config.test_missing_coverage?
+
       {
         range: Solargraph::Range.from_to(0, 0, 0, source.code.lines[0].length).to_hash,
         severity: Solargraph::Diagnostics::Severities::ERROR,
         source: 'TestCoverage',
-        message: "No unit test file found at #{test_file_location}"
+        message: "No unit test file found at #{test_file(source)}"
       }
     end
   end

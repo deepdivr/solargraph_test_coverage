@@ -9,8 +9,6 @@ Currently there are four different diagnostics:
 - Spec cannot be found (Error message will be on line 1)
 
 
-Currently expects RSpec/Rails.
-
 ## Installation
 
 Add this line to your application's Gemfile:

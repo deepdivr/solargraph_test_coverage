@@ -66,7 +66,7 @@ module SolargraphTestCoverage
     def uncovered_lines(results)
       results.fetch(:lines)
              .each_with_index
-             .select { |c, _| c.zero? }
+             .select { |c, _| c == 0 }
              .map { |_, i| i }
              .compact
     end

@@ -7,7 +7,7 @@ module SolargraphTestCoverage
     # @return [Boolean]
     #
     def exclude_file?(source_filename)
-      return true if source_filename.start_with? test_path
+      return true if source_filename.start_with? Helpers.test_path
 
       Config.exclude_paths.each { |path| return true if source_filename.sub(Dir.pwd, '').include? path }
 
@@ -98,7 +98,6 @@ module SolargraphTestCoverage
     # calling Coverage.result after requiring stops and resets it.
     #
     # This is a bit experimental - I'm not sure if there will be downstream side-effects
-    # from having Rails preloaded, but... we'll see :)
     #
     # @return [Boolean]
     #
@@ -118,7 +117,10 @@ module SolargraphTestCoverage
       false
     end
 
-    def test_path
+    # Returns absolute path for test folder
+    # @return [String]
+    #
+    def self.test_path
       File.join(Dir.pwd, Config.test_dir)
     end
   end

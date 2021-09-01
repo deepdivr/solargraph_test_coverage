@@ -20,6 +20,7 @@ gem 'solargraph_test_coverage'
 ```
 
 Then add this to your `.solargraph.yml` config:
+
 ```yaml
 plugins:
   - solargraph_test_coverage
@@ -27,16 +28,22 @@ reporters:
   - test_coverage
 ```
 
-If you are using a `spec/rails_helper.rb` file, you will need to change:
-```ruby
-require "spec_helper"
+Additionally, a `test_coverage` key can be added to `.solargraph.yml`. The default values are shown below:
+
+```yaml
+test_coverage:
+  preload_rails: true
+  test_framework: rspec # or minitest
+  coverage:
+  - line
+  - branch
+  - test_failing
+  - test_missing
+  exclude_paths:
+  - 'app/controller'
 ```
 
-to
 
-```ruby
-require_relative "spec_helper"
-```
 
 And then execute:
 
@@ -48,7 +55,7 @@ Or install it yourself as:
 
 ## Usage
 
-With solargraph running and connected to your text editor, you should see diagnostic messages for test coverage.
+With solargraph running and connected to your text editor, you should see diagnostic messages for line coverage, branch coverage, test file presence, and test status (if it's failing)
 
 
 ## Contributing

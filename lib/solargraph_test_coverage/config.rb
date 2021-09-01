@@ -15,7 +15,8 @@ module SolargraphTestCoverage
           'test_missing'
         ],
         'exclude_paths' => [             # don't attempt to find/run a spec for files that match these paths
-          'app/controller'
+          'app/controller',
+          'concerns'
         ]
       }.freeze
 

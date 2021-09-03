@@ -6,17 +6,14 @@ module SolargraphTestCoverage
     def exclude_file?(source_filename)
       return true if source_filename.start_with? test_path
 
-      Config.exclude_paths.each { |path| return true if source_filename.sub(Dir.pwd, '').include? path }
-
-      false
+      Config.exclude_paths.any? { |path| source_filename.sub(Dir.pwd, '').include? path }
     end
 
     def test_file(source)
       relative_filepath = source.location.filename.sub(Dir.pwd, '').split('/').reject(&:empty?)
       relative_filepath[0] = Config.test_dir
 
-      File.join(Dir.pwd, relative_filepath.join('/'))
-          .sub('.rb', Config.test_file_suffix)
+      File.join(Dir.pwd, relative_filepath.join('/')).sub('.rb', Config.test_file_suffix)
     end
 
     # @return [Hash]

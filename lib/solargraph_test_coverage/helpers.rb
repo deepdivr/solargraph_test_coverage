@@ -3,9 +3,7 @@
 module SolargraphTestCoverage
   # Some helper functions for the diagnostics
   module Helpers
-    # Determines if a file should be excluded from running diagnostics
     # @return [Boolean]
-    #
     def exclude_file?(source_filename)
       return true if source_filename.start_with? Helpers.test_path
 
@@ -14,9 +12,7 @@ module SolargraphTestCoverage
       false
     end
 
-    # Attempts to find the corresponding unit test file
     # @return [String]
-    #
     def test_file(source)
       relative_filepath = source.location.filename.sub(Dir.pwd, '').split('/').reject(&:empty?)
       relative_filepath[0] = Config.test_dir
@@ -25,11 +21,7 @@ module SolargraphTestCoverage
           .sub('.rb', Config.test_file_suffix)
     end
 
-    # Runs test file in a child process with specified testing framework
-    # Returns coverage results for current working file
-    #
     # @return [Hash]
-    #
     def run_test(source)
       ForkProcess.run do
         Coverage.start(lines: true, branches: true)
@@ -47,32 +39,24 @@ module SolargraphTestCoverage
     # @return [Array]
     #
     def uncovered_lines(results)
-      results.fetch(:lines)
-             .each_with_index
-             .select { |c, _| c&.zero? }
-             .map { |_, i| i }
-             .compact
+      return [] unless results[:lines]
+
+      results[:lines].each_with_index
+                     .select { |c, _| c&.zero? }
+                     .map { |_, i| i }
+                     .compact
     end
 
-    # Builds a new Branch object for each branch tested from results hash
-    # Then removes branches which have test coverage
-    #
     # @return [Array]
-    #
     def uncovered_branches(results)
       Branch.build_from(results).reject(&:covered?)
     end
 
-    # Builds a range for warnings/errors
     # @return [Hash]
-    #
     def range(start_line, start_column, end_line, end_column)
       Solargraph::Range.from_to(start_line, start_column, end_line, end_column).to_hash
     end
 
-    # requires the specified testing framework
-    # @return [Boolean]
-    #
     def self.require_testing_framework!
       case Config.test_framework
       when 'rspec'
@@ -117,9 +101,7 @@ module SolargraphTestCoverage
       false
     end
 
-    # Returns absolute path for test folder
     # @return [String]
-    #
     def self.test_path
       File.join(Dir.pwd, Config.test_dir)
     end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# frozen_string_literal = true
-
 module SolargraphTestCoverage
   module Config
     extend self
@@ -67,6 +65,46 @@ module SolargraphTestCoverage
       end
     end
 
+    def require_testing_framework!
+      case test_framework
+      when 'rspec'
+        require 'rspec/core'
+      when 'minitest'
+        require 'minitest/autorun'
+      else
+        raise UnknownTestingGem
+      end
+    end
+
+    # This gives us a nice speed-boost when running test in child process
+    #
+    # We rescue the LoadError since Solargraph would catch it otherwise,
+    # and not load the plugin at all.
+    #
+    # Adding the spec/ directory to the $LOAD_PATH lets 'require "spec_helper"'
+    # commonly found in rails_helper work.
+    #
+    # If Coverage was started in Rails/Spec helper by SimpleCov,
+    # calling Coverage.result after requiring stops and resets it.
+    #
+    # This is a bit experimental
+    #
+    def preload_rails!
+      return if defined?(Rails) || !File.file?('spec/rails_helper.rb')
+
+      $LOAD_PATH.unshift(test_path) unless $LOAD_PATH.include?(test_path)
+
+      require File.join(test_path, 'rails_helper')
+      Coverage.result(stop: true, clear: true) if Coverage.running?
+
+      true
+    rescue LoadError => e
+      Solargraph::Logging.logger.warn "LoadError when trying to require 'rails_helper'"
+      Solargraph::Logging.logger.warn "[#{e.class}] #{e.message}"
+
+      false
+    end
+
     private
 
     def plugin_config
@@ -77,6 +115,10 @@ module SolargraphTestCoverage
 
     def workspace_config
       Solargraph::Workspace::Config.new(Dir.pwd).raw_data.fetch('test_coverage', {})
+    end
+
+    def test_path
+      ReporterHelpers.test_path
     end
   end
 end

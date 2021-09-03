@@ -3,11 +3,8 @@
 # test_coverage reporter for Solargraph
 module SolargraphTestCoverage
   class TestCoverageReporter < Solargraph::Diagnostics::Base
-    include Helpers
+    include ReporterHelpers
 
-    # LSP Diagnostic method
-    # @return [Array]
-    #
     def diagnose(source, _api_map)
       return [] if source.code.empty? || exclude_file?(source.location.filename)
       return [test_missing_error(source)] unless File.file?(test_file(source))
@@ -20,9 +17,6 @@ module SolargraphTestCoverage
 
     private
 
-    # Compiles all diagnostic messages for source file
-    # @return [Array]
-    #
     def messages(source, results)
       messages = [
         line_warnings(source, results),
@@ -33,30 +27,7 @@ module SolargraphTestCoverage
       messages.flatten.compact
     end
 
-    # Creates array of warnings for uncovered lines
-    # @return [Array]
-    #
-    def line_warnings(source, results)
-      uncovered_lines(results).map { |line| line_coverage_warning(source, line) }
-    end
 
-    # Creates array of warnings for uncovered branches
-    # @return [Array]
-    #
-    def branch_warnings(source, results)
-      uncovered_branches(results).map { |branch| branch_coverage_warning(source, branch.report) }
-    end
-
-    # Creates array containing error for failing spec
-    # @return [Array]
-    #
-    def test_passing_error(source, results)
-      results[:test_status] ? [] : [test_failing_error(source)]
-    end
-
-    # Creates LSP warning message for missing line coverage
-    # @return [Hash]
-    #
     def line_coverage_warning(source, line)
       return unless Config.line_coverage?
 
@@ -68,11 +39,6 @@ module SolargraphTestCoverage
       }
     end
 
-    # Creates LSP warning message for missing branch coverage
-    # Line numbers are off by 1, since Branch Coverage starts counting at 1, not 0
-    #
-    # @return [Hash]
-    #
     def branch_coverage_warning(source, report)
       return unless Config.branch_coverage?
 
@@ -84,9 +50,6 @@ module SolargraphTestCoverage
       }
     end
 
-    # Creates LSP error message if test file is failing
-    # @return [Hash]
-    #
     def test_failing_error(source)
       return unless Config.test_failing_coverage?
 
@@ -98,11 +61,6 @@ module SolargraphTestCoverage
       }
     end
 
-    #
-    # Creates LSP error message if no test file can be found
-    #
-    # @return [Hash]
-    #
     def test_missing_error(source)
       return unless Config.test_missing_coverage?
 

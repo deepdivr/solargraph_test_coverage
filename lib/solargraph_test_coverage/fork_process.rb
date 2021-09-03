@@ -5,11 +5,8 @@ module SolargraphTestCoverage
   # When called with a block, runs the content of said block in a new (forked) process
   # the return value of the process/block can be captured and used in parent process
   class ForkProcess
-    #
     # Executes block in forked process, and captures returned value of that block
     # Returns result of block
-    #
-    # @return [Object]
     #
     def self.run
       read, write = IO.pipe

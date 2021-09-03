@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    solargraph_test_coverage (0.2.1)
+    solargraph_test_coverage (0.2.3)
       solargraph (~> 0.40, > 0.40)
 
 GEM

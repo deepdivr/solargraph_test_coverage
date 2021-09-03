@@ -18,8 +18,12 @@ module SolargraphTestCoverage
     end
 
     def run!
-      @result = test_framework_runner.run([@test_file])
+      @result = test_framework_runner.run(test_options)
       self
+    end
+
+    def test_options
+      raise NotImplementedError
     end
 
     def passed?
@@ -33,6 +37,10 @@ module SolargraphTestCoverage
 
   # Test Runner Subclass for RSpec
   class RSpecRunner < TestRunner
+    def test_options
+      [@test_file, '-o', '/dev/null']
+    end
+
     def passed?
       @result&.zero?
     end
@@ -44,6 +52,10 @@ module SolargraphTestCoverage
 
   # Test Runner Subclass for Minitest
   class MinitestRunner < TestRunner
+    def test_options
+      [@test_file]
+    end
+
     def passed?
       @result
     end

@@ -33,13 +33,13 @@ test_coverage:
   preload_rails: true
   test_framework: rspec # or minitest
   coverage:
-  - line
-  - branch
-  - test_failing
-  - test_missing
+    - line
+    - branch
+    - test_failing
+    - test_missing
   exclude_paths:
-  - 'app/controller'
-  - 'concerns'
+    - 'app/controller'
+    - 'concerns'
 ```
 
 

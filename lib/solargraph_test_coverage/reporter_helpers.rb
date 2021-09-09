@@ -25,12 +25,26 @@ module SolargraphTestCoverage
       end
     end
 
-    def test_passing_error(source, results)
-      results[:test_status] ? [] : [test_failing_error(source)]
+    def messages(source, results)
+      messages = [
+        line_warnings(source, results),
+        branch_warnings(source, results),
+        test_passing_error(source, results)
+      ]
+
+      messages.flatten.compact
     end
 
     def line_warnings(source, results)
       uncovered_lines(results).map { |line| line_coverage_warning(source, line) }
+    end
+
+    def branch_warnings(source, results)
+      uncovered_branches(results).map { |branch| branch_coverage_warning(source, branch.report) }
+    end
+
+    def test_passing_error(source, results)
+      results[:test_status] ? [] : [test_failing_error(source)]
     end
 
     # Adapted from SingleCov
@@ -46,10 +60,6 @@ module SolargraphTestCoverage
                      .select { |c, _| c&.zero? }
                      .map { |_, i| i }
                      .compact
-    end
-
-    def branch_warnings(source, results)
-      uncovered_branches(results).map { |branch| branch_coverage_warning(source, branch.report) }
     end
 
     def uncovered_branches(results)

@@ -17,17 +17,6 @@ module SolargraphTestCoverage
 
     private
 
-    def messages(source, results)
-      messages = [
-        line_warnings(source, results),
-        branch_warnings(source, results),
-        test_passing_error(source, results)
-      ]
-
-      messages.flatten.compact
-    end
-
-
     def line_coverage_warning(source, line)
       return unless Config.line_coverage?
 

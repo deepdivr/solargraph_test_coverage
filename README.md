@@ -51,6 +51,9 @@ And then execute:
 Or install it yourself as:
 
     $ gem install solargraph_test_coverage
+    
+A note on testing framework:
+Since both Minitest and RSpec are supported, neither are direct dependencies of this gem. Therefore, you have to have them installed separately either via your bundle or via `gem install`.
 
 ## Usage
 

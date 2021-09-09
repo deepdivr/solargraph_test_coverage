@@ -55,9 +55,9 @@ module SolargraphTestCoverage
 
       {
         range: range(0, 0, 0, source.code.lines[0].length),
-        severity: Solargraph::Diagnostics::Severities::ERROR,
+        severity: Solargraph::Diagnostics::Severities::HINT,
         source: 'TestCoverage',
-        message: "No unit test file found at #{test_file(source)}"
+        message: "No test file found at '#{test_file(source).sub("#{Dir.pwd}/", '')}'"
       }
     end
   end

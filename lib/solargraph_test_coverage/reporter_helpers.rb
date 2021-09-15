@@ -9,6 +9,12 @@ module SolargraphTestCoverage
       Config.exclude_paths.any? { |path| source_filename.sub(Dir.pwd, '').include? path }
     end
 
+    def using_debugger?(source)
+      source.code.include?('binding.pry') ||
+        source.code.include?('byebug') ||
+        source.code.include?('debugger')
+    end
+
     def test_file(source)
       relative_filepath = source.location.filename.sub(Dir.pwd, '').split('/').reject(&:empty?)
       relative_filepath[0] = Config.test_dir

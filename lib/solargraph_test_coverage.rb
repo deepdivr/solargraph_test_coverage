@@ -10,6 +10,7 @@ require 'solargraph_test_coverage/test_coverage_reporter'
 
 require 'solargraph'
 require 'coverage'
+require 'timeout'
 
 module SolargraphTestCoverage
   class ChildFailedError < StandardError; end

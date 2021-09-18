@@ -5,25 +5,36 @@ module SolargraphTestCoverage
   # When called with a block, runs the content of said block in a new (forked) process
   # the return value of the process/block can be captured and used in parent process
   class ForkProcess
-    # Executes block in forked process, and captures returned value of that block
-    # Returns result of block
-    #
-    def self.run
-      read, write = IO.pipe
+    def self.call(&block)
+      new.run(&block)
+    end
 
+    def initialize
+      @read, @write = IO.pipe
+    end
+
+    def run(&block)
       pid = fork do
-        read.close
-        result = yield
-        Marshal.dump(result, write)
+        @read.close
+        Marshal.dump(run_block_with_timeout(&block), @write)
         exit!(0) # skips exit handlers.
       end
 
-      write.close
-      result = read.read
-      Process.wait(pid)
-      raise ChildFailedError if result.nil? || result.empty?
+      @write.close
+      result = @read.read
 
-      Marshal.load(result)
+      Process.wait(pid)
+      raise ChildFailedError if result.nil?
+
+      Marshal.load(result).tap { |r| raise ChildFailedError if r.nil? }
+    end
+
+    private
+
+    def run_block_with_timeout(&block)
+      Timeout.timeout(30, &block)
+    rescue StandardError
+      nil
     end
   end
 end

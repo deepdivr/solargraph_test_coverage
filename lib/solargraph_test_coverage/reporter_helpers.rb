@@ -24,7 +24,7 @@ module SolargraphTestCoverage
 
     # @return [Hash]
     def run_test(source)
-      ForkProcess.run do
+      ForkProcess.call do
         Coverage.start(lines: true, branches: true)
         runner = TestRunner.with(test_file(source)).run!
         Coverage.result.fetch(source.location.filename, {}).merge({ test_status: runner.passed? })

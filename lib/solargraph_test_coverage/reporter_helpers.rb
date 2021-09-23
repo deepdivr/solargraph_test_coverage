@@ -4,22 +4,15 @@ module SolargraphTestCoverage
   # Some helper functions for the diagnostics
   module ReporterHelpers
     # @return [Hash]
-    def run_test(source)
+    def run_test(source, test_file)
       ForkProcess.call do
         Coverage.start(lines: true, branches: true)
-        runner = TestRunner.with(test_file(source)).run!
-        Coverage.result.fetch(source.location.filename, {}).merge({ test_status: runner.passed? })
+        runner = TestRunner.with(test_file).run!
+
+        Coverage.result
+                .fetch(source.location.filename, {})
+                .merge({ test_status: runner.passed?, failed_examples: runner.failed_examples })
       end
-    end
-
-    def messages(source, results)
-      messages = [
-        line_warnings(source, results),
-        branch_warnings(source, results),
-        test_passing_error(source, results)
-      ]
-
-      messages.flatten.compact
     end
 
     def line_warnings(source, results)

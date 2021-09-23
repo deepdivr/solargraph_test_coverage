@@ -3,14 +3,6 @@
 module SolargraphTestCoverage
   # Some helper functions for the diagnostics
   module ReporterHelpers
-
-    def test_file(source)
-      relative_filepath = source.location.filename.sub(Dir.pwd, '').split('/').reject(&:empty?)
-      relative_filepath[0] = Config.test_dir
-
-      File.join(Dir.pwd, relative_filepath.join('/')).sub('.rb', Config.test_file_suffix)
-    end
-
     # @return [Hash]
     def run_test(source)
       ForkProcess.call do
@@ -65,12 +57,5 @@ module SolargraphTestCoverage
       Solargraph::Range.from_to(start_line, start_column, end_line, end_column).to_hash
     end
 
-    def self.test_path
-      File.join(Dir.pwd, Config.test_dir)
-    end
-
-    def test_path
-      ReporterHelpers.test_path
-    end
   end
 end

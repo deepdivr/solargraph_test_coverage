@@ -6,6 +6,7 @@ module SolargraphTestCoverage
 
     DEFAULTS = {
       'preload_rails' => true,         # can be true or false - performance optimization
+      'debug' => false,                # can be true or false - shows debug messages when ChildFailedError is raised
       'test_framework' => 'rspec',     # can be 'rspec' or 'minitest'
       'coverage' => [                  # All diagnostics are enabled by default
         'line',                        # Specifying an array with fewer diagnostics will overwrite this
@@ -18,6 +19,10 @@ module SolargraphTestCoverage
         'concerns'
       ]
     }.freeze
+
+    def debug?
+      plugin_config['debug']
+    end
 
     def preload_rails?
       plugin_config['preload_rails']

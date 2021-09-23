@@ -118,7 +118,7 @@ module SolargraphTestCoverage
     end
 
     def test_path
-      ReporterHelpers.test_path
+      FileHelpers.test_path
     end
   end
 end

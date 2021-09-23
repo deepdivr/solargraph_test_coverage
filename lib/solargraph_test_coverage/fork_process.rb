@@ -24,17 +24,20 @@ module SolargraphTestCoverage
       result = @read.read
 
       Process.wait(pid)
-      raise ChildFailedError if result.nil?
+      raise ChildFailedError, "Couldn't read pipe" if result.nil?
 
-      Marshal.load(result).tap { |r| raise ChildFailedError if r.nil? }
+      Marshal.load(result).tap do |r|
+        raise ChildFailedError, "Marshal.load(result) returned nil" if r.nil?
+        raise ChildFailedError, r.message if r.is_a? Exception
+      end
     end
 
     private
 
     def run_block_with_timeout(&block)
-      Timeout.timeout(30, &block)
-    rescue StandardError
-      nil
+      Timeout.timeout(30000, &block)
+    rescue StandardError => e
+      e
     end
   end
 end

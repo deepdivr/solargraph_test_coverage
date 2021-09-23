@@ -52,10 +52,5 @@ module SolargraphTestCoverage
     def uncovered_branches(results)
       Branch.build_from(results).reject(&:covered?)
     end
-
-    def range(start_line, start_column, end_line, end_column)
-      Solargraph::Range.from_to(start_line, start_column, end_line, end_column).to_hash
-    end
-
   end
 end

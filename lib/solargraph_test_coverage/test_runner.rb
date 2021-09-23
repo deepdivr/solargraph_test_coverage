@@ -15,34 +15,57 @@ module SolargraphTestCoverage
     def initialize(test_file)
       @test_file = test_file
       @result    = nil
+      @output    = StringIO.new
     end
 
     def run!
-      @result = test_framework_runner.run(test_options)
+      @result = test_framework_runner.run(test_options, $stderr, @output)
       self
     end
 
-    def test_options
+    def failed_examples
       raise NotImplementedError
     end
 
     def passed?
+      raise NotImplementedError
+    end
+
+    private
+
+    def test_options
       raise NotImplementedError
     end
 
     def test_framework_runner
       raise NotImplementedError
     end
+
+    def output
+      return if @output.string.empty?
+
+      JSON.parse @output.string
+    end
   end
 
   # Test Runner Subclass for RSpec
   class RSpecRunner < TestRunner
-    def test_options
-      [@test_file, '-o', '/dev/null']
+    def failed_examples
+      return unless output
+
+      output['examples']
+        .select { |example| example['status'] == 'failed' }
+        .map { |example| { line_number: example['line_number'] - 1, message: example.dig('exception', 'message') } }
     end
 
     def passed?
       @result&.zero?
+    end
+
+    private
+
+    def test_options
+      [@test_file, '--format', 'json']
     end
 
     def test_framework_runner
@@ -52,12 +75,19 @@ module SolargraphTestCoverage
 
   # Test Runner Subclass for Minitest
   class MinitestRunner < TestRunner
-    def test_options
-      [@test_file]
+    # TODO
+    def failed_examples
+      []
     end
 
     def passed?
       @result
+    end
+
+    private
+
+    def test_options
+      [@test_file]
     end
 
     def test_framework_runner

@@ -12,7 +12,8 @@ module SolargraphTestCoverage
         'line',                        # Specifying an array with fewer diagnostics will overwrite this
         'branch',
         'test_failing',
-        'test_missing'
+        'test_missing',
+        'example_failing'
       ],
       'exclude_paths' => [             # don't attempt to find/run a spec for files that match these paths
         'app/controller',
@@ -46,6 +47,10 @@ module SolargraphTestCoverage
 
     def test_missing_coverage?
       plugin_config['coverage'].include? 'test_missing'
+    end
+
+    def example_failing_coverage?
+      plugin_config['coverage'].include? 'example_failing'
     end
 
     def test_framework

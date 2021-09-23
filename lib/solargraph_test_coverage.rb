@@ -10,6 +10,7 @@ require 'solargraph_test_coverage/config'
 require 'solargraph_test_coverage/test_runner'
 require 'solargraph_test_coverage/diagnostic_messages'
 require 'solargraph_test_coverage/test_coverage_reporter'
+require 'solargraph_test_coverage/example_status_reporter'
 
 require 'solargraph'
 require 'coverage'
@@ -24,4 +25,5 @@ module SolargraphTestCoverage
   Config.preload_rails! if Config.preload_rails?
 
   Solargraph::Diagnostics.register 'test_coverage', TestCoverageReporter
+  Solargraph::Diagnostics.register 'example_status', ExampleStatusReporter
 end

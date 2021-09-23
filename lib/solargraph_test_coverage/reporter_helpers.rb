@@ -27,6 +27,11 @@ module SolargraphTestCoverage
       results[:test_status] ? [] : [test_failing_error(source)]
     end
 
+    def example_failing_errors(source, results)
+      results.fetch(:failed_examples, [])
+             .map { |example| example_failing_error(example, source) }
+    end
+
     # Adapted from SingleCov
     # Coverage returns nil for untestable lines (like 'do', 'end', 'if' keywords)
     # otherwise returns int showing how many times a line was called

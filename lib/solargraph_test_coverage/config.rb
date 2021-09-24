@@ -57,6 +57,10 @@ module SolargraphTestCoverage
       plugin_config['test_framework']
     end
 
+    def full_test_dir
+      File.join(Dir.pwd, test_dir)
+    end
+
     def test_dir
       case test_framework
       when 'rspec'
@@ -102,9 +106,9 @@ module SolargraphTestCoverage
     def preload_rails!
       return if defined?(Rails) || !File.file?('spec/rails_helper.rb')
 
-      $LOAD_PATH.unshift(test_path) unless $LOAD_PATH.include?(test_path)
+      $LOAD_PATH.unshift(full_test_dir) unless $LOAD_PATH.include?(full_test_dir)
 
-      require File.join(test_path, 'rails_helper')
+      require File.join(full_test_dir, 'rails_helper')
       Coverage.result(stop: true, clear: true) if Coverage.running?
 
       true
@@ -125,10 +129,6 @@ module SolargraphTestCoverage
 
     def workspace_config
       Solargraph::Workspace::Config.new(Dir.pwd).raw_data.fetch('test_coverage', {})
-    end
-
-    def test_path
-      FileHelpers.test_path
     end
   end
 end

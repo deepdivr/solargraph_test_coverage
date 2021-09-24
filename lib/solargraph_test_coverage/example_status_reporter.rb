@@ -8,13 +8,16 @@ module SolargraphTestCoverage
     include DiagnosticMessages
 
     def diagnose(source, _api_map)
-      if source.code.empty? || using_debugger?(source) || !is_test_file?(source) || is_test_support_file?(source)
-        return []
-      end
+      @source    = source
+      @filename  = source.location.filename
 
-      example_failing_errors(source, run_test(source, source.location.filename))
+      return [] if source.code.empty? || using_debugger? || !in_test_dir? || test_support_file?
+
+      @results = run_test(@filename)
+
+      example_failing_errors
     rescue ChildFailedError => e
-      Config.debug? ? [debug_message(e, source)] : []
+      Config.debug? ? [debug_message(e)] : []
     end
   end
 end

@@ -4,32 +4,33 @@ module SolargraphTestCoverage
   # Some helper functions for the diagnostics
   module ReporterHelpers
     # @return [Hash]
-    def run_test(source, test_file)
+    def run_test(test_file)
       ForkProcess.call do
         Coverage.start(lines: true, branches: true)
         runner = TestRunner.with(test_file).run!
+        extra = { test_status: runner.passed?, failed_examples: runner.failed_examples }
 
-        Coverage.result
-                .fetch(source.location.filename, {})
-                .merge({ test_status: runner.passed?, failed_examples: runner.failed_examples })
+        Coverage.result.fetch(@filename, {}).merge(extra)
       end
     end
 
-    def line_warnings(source, results)
-      uncovered_lines(results).map { |line| line_coverage_warning(source, line) }
+    def branch_warnings
+      Branch.build_from(@results)
+            .reject(&:covered?)
+            .map { |branch| branch_coverage_warning(branch.report) }
     end
 
-    def branch_warnings(source, results)
-      uncovered_branches(results).map { |branch| branch_coverage_warning(source, branch.report) }
+    def test_passing_error
+      @results[:test_status] ? [] : [test_failing_error]
     end
 
-    def test_passing_error(source, results)
-      results[:test_status] ? [] : [test_failing_error(source)]
+    def example_failing_errors
+      @results.fetch(:failed_examples, [])
+              .map { |example| example_failing_error(example) }
     end
 
-    def example_failing_errors(source, results)
-      results.fetch(:failed_examples, [])
-             .map { |example| example_failing_error(example, source) }
+    def line_warnings
+      uncovered_lines.map { |line| line_coverage_warning(line) }
     end
 
     # Adapted from SingleCov
@@ -38,17 +39,13 @@ module SolargraphTestCoverage
     #
     #  [nil, 1, 0, 1, 0] -> [3, 5]
     #  Returns array of line numbers with 0 coverage
-    def uncovered_lines(results)
-      return [] unless results[:lines]
+    def uncovered_lines
+      return [] unless @results[:lines]
 
-      results[:lines].each_with_index
-                     .select { |c, _| c&.zero? }
-                     .map { |_, i| i }
-                     .compact
-    end
-
-    def uncovered_branches(results)
-      Branch.build_from(results).reject(&:covered?)
+      @results[:lines].each_with_index
+                      .select { |c, _| c&.zero? }
+                      .map { |_, i| i }
+                      .compact
     end
   end
 end

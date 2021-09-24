@@ -3,26 +3,24 @@
 module SolargraphTestCoverage
   # Some guard functions for the diagnostics
   module ReporterGuards
-    def has_test_file?(source)
-      File.file? FileHelpers.test_file(source)
+    def test_file_exists?
+      File.file? FileHelpers.test_file(@filename)
     end
 
-    def is_test_file?(source)
-      source.location.filename.start_with? FileHelpers.test_path
+    def in_test_dir?
+      @filename.start_with? Config.full_test_dir
     end
 
-    def is_test_support_file?(source)
-      is_test_file?(source) && !source.location.filename.end_with?(Config.test_file_suffix)
+    def test_support_file?
+      in_test_dir? && !@filename.end_with?(Config.test_file_suffix)
     end
 
-    def exclude_file?(source)
-      Config.exclude_paths.any? { |path| source.location.filename.sub(Dir.pwd, '').include? path }
+    def exclude_file?
+      Config.exclude_paths.any? { |path| FileHelpers.relative_filename(@filename).include? path }
     end
 
-    def using_debugger?(source)
-      source.code.include?('binding.pry') ||
-        source.code.include?('byebug') ||
-        source.code.include?('debugger')
+    def using_debugger?
+      @source.code.match?(/(binding\.pry|byebug|debugger)/)
     end
   end
 end

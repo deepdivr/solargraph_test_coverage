@@ -16,7 +16,7 @@ module SolargraphTestCoverage
     end
 
     def exclude_file?
-      Config.exclude_paths.any? { |path| FileHelpers.relative_filename(@filename).include? path }
+      Config.exclude_paths.any? { |path| FileHelpers.relative_path(@filename).include? path }
     end
 
     def using_debugger?

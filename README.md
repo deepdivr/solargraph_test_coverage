@@ -14,7 +14,7 @@ Currently there are four different diagnostics:
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'solargraph_test_coverage'
+gem 'solargraph_test_coverage', require: false
 ```
 
 Then add this to your `.solargraph.yml` config:

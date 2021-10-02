@@ -7,9 +7,9 @@ module SolargraphTestCoverage
     def test_file(filename)
       return filename if test_file?(filename)
 
-      path       = relative_path(filename).split('/')
-      path.first = Config.test_dir
-      path.last  = path.last.sub(/\.rb$/, Config.test_file_suffix)
+      path     = relative_path(filename).split('/')
+      path[0]  = Config.test_dir
+      path[-1] = path.last.sub(/\.rb$/, Config.test_file_suffix)
 
       File.join(Dir.pwd, path.join('/'))
     end

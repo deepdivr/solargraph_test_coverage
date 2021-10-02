@@ -41,7 +41,7 @@ test_coverage:
     - branch
     - test_failing
     - test_missing
-    - example_status
+    - example_failing
   exclude_paths:
     - 'app/controller'
     - 'concerns'

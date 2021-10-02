@@ -15,7 +15,7 @@ module SolargraphTestCoverage
 
       @results = run_test(@filename)
 
-      example_failing_errors
+      example_failing_errors.compact
     rescue ChildFailedError => e
       Config.debug? ? [debug_message(e)] : []
     end

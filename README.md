@@ -24,6 +24,7 @@ plugins:
   - solargraph_test_coverage
 reporters:
   - test_coverage
+  - example_status
 ```
 
 Additionally, a `test_coverage` key can be added to `.solargraph.yml`. The default values are shown below:

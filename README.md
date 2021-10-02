@@ -2,11 +2,14 @@
 
 Solargraph Plugin that provides a diagnostic reporter for unit-test coverage.
 
-Currently there are four different diagnostics:
+Currently there are four different diagnostics when viewing an app/unit file:
 - Line is not covered
 - Branch is not covered (With a note if it's the 'THEN' or 'ELSE' branch)
 - Spec is failing (Error message will be on line 1)
 - Spec cannot be found (Error message will be on line 1)
+
+There's one diagnostic if you're viewing a spec file:
+- Example Status. Reports if an `it` block is currently failing (rspec only for now)
 
 
 ## Installation
@@ -24,6 +27,7 @@ plugins:
   - solargraph_test_coverage
 reporters:
   - test_coverage
+  - example_status
 ```
 
 Additionally, a `test_coverage` key can be added to `.solargraph.yml`. The default values are shown below:
@@ -37,6 +41,7 @@ test_coverage:
     - branch
     - test_failing
     - test_missing
+    - example_failing
   exclude_paths:
     - 'app/controller'
     - 'concerns'
